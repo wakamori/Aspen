@@ -1,0 +1,3 @@
+[submodule "minikonoha"]
+	path = minikonoha
+	url = git://github.com/konoha-project/minikonoha.git
