@@ -11,6 +11,31 @@
 		<script src="mode/clike/clike.js"></script>
 		<link rel="stylesheet" href="doc/docs.css">
 		<style>.CodeMirror {border: 2px inset #dee;}</style>
+		<script>
+			$(function() {
+				var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+					lineNumbers: true,
+					matchBrackets: true,
+					mode: "text/x-konoha",
+					konohaurl: "aspen/index.cgi"
+				});
+				$("#run").click(function() {
+					editor.run(function(text) {
+						var doc;
+						if(document.all) {
+							doc = document.getElementById("result-iframe").contentWindow.document;
+						}
+						else {
+							doc = document.getElementById("result-iframe").contentDocument;
+						}
+						doc.writeln("<body></body>");
+						doc.body.innerHTML = "";
+						doc.writeln("<script>function p(text){document.body.innerHTML += text + '<br>'}");
+						doc.writeln(text + "<" + "/script>");
+					});
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<h1>Aspen editor</h1>
@@ -25,31 +50,7 @@ int fib(int n) {
 }
 System.p(fib(30));
 </textarea></form>
-<button id="run">run</button>
-
-		<script>
-			var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				lineNumbers: true,
-				matchBrackets: true,
-				mode: "text/x-csrc",
-				konohaurl: "aspen/index.cgi"
-			});
-			$("#run").click(function() {
-				editor.run(function(text) {
-					alert(text);
-				});
-			});
-		</script>
-
-		<p>Simple mode that tries to handle C-like languages as well as it
-		can. Takes two configuration parameters: <code>keywords</code>, an
-		object whose property names are the keywords in the language,
-		and <code>useCPP</code>, which determines whether C preprocessor
-		directives are recognized.</p>
-
-		<p><strong>MIME types defined:</strong> <code>text/x-csrc</code>
-		(C code), <code>text/x-c++src</code> (C++
-		code), <code>text/x-java</code> (Java
-		code), <code>text/x-csharp</code> (C#).</p>
+		<button id="run">run</button>
+		<iframe id="result-iframe"></iframe>
 	</body>
 </html>

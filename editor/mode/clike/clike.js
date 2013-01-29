@@ -299,4 +299,28 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
       }
     }
   });
+  CodeMirror.defineMIME("text/x-konoha", {
+    name: "clike",
+    keywords: words(
+      "catch class do else extends false finally for if " +
+      "Import new null Object return " +
+      "this throw try var while = <: " +
+      "# @ " +
+      "Array " +
+      "Exception Func " +
+      "Iterator Map " +
+      "Symbol " +
+      "boolean Byte " +
+      "float int Math " +
+      "System void"
+    ),
+    blockKeywords: words("catch class do else finally for if try while"),
+    atoms: words("true false null"),
+    hooks: {
+      "@": function(stream) {
+        stream.eatWhile(/[\w\$_]/);
+        return "meta";
+      }
+    }
+  });
 }());
