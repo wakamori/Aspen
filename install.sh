@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mkdir minikonoha/build
-cd minikonoha/build
+mkdir konoha3/build
+cd konoha3/build
 cmake ..
 make
 sudo make install

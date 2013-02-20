@@ -1,13 +1,13 @@
-#!/usr/local/bin/minikonoha
+#!/usr/local/bin/konoha
 
-import("dscript.subproc");
-import("JavaScript.Array");
-import("JavaScript.String");
-import("Type.File");
-import("posix.path");
-import("posix.process");
+Import("dscript.subproc");
+Import("JavaScript.Array");
+Import("JavaScript.String");
+Import("Type.File");
+Import("posix.path");
+Import("posix.process");
 
-load("./decodeURI.k");
+Load("./decodeURI.k");
 
 void main() {
 	SubProc sp = new SubProc("mktemp");
@@ -19,8 +19,8 @@ void main() {
 	tmp.print(input);
 	tmp.flush();
 	tmp.close();
-	sp = new SubProc("/usr/local/bin/minikonoha");
-	sp.setArgumentList(["-MJavaScript", filename]);
+	sp = new SubProc("/usr/local/bin/konoha");
+	sp.setArgumentList(["-MJavaScript", "-ISyntax.GlobalVariable", "-IType.Float", "-IJavaScript.String", "-IJavaScript.Array", "-ISyntax.CStyleWhile", filename]);
 	sp.bg();
 	stdout.println("Content-Type: application/javascript; charset=utf-8\n");
 	stdout.println(sp.communicate("")[0]);

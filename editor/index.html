@@ -17,21 +17,36 @@
 					lineNumbers: true,
 					matchBrackets: true,
 					mode: "text/x-konoha",
-					konohaurl: "aspen/index.cgi"
+					konohaurl: "http://localhost/~chen_ji/aspen/index.cgi"
 				});
+				var worker = new Worker('http://localhost/~chen_ji/aspen/editor/workaround.js');
+				worker.onmessage = function(event) {
+					var e = event.data.event;
+					if(e === "print") {
+						$("#result").append(event.data.data + "<br>");
+					}
+				};
+				worker.onerror = function(error) {
+					alert(JSON.stringify(error));
+				};
+				var isError = function(text) {
+					var line = text.split("\n");
+					for(var i in line) {
+						if(line[i].indexOf(" - (error) ") >= 0) {
+							$("#result").text(line[i] + "\n");
+							return true;
+						}
+					}
+					return false;
+				};
 				$("#run").click(function() {
 					editor.run(function(text) {
-						var doc;
-						if(document.all) {
-							doc = document.getElementById("result-iframe").contentWindow.document;
+						$("#result").text("");
+						if(!isError(text)) {
+							var msg = "function() {\n" + text.toString() + "\n\treturn true;\n}";
+							console.log(msg);
+							worker.postMessage(msg);
 						}
-						else {
-							doc = document.getElementById("result-iframe").contentDocument;
-						}
-						doc.writeln("<body></body>");
-						doc.body.innerHTML = "";
-						doc.writeln("<script>function p(text){document.body.innerHTML += text + '<br>'}");
-						doc.writeln(text + "<" + "/script>");
 					});
 				});
 			});
@@ -51,6 +66,7 @@ int fib(int n) {
 System.p(fib(30));
 </textarea></form>
 		<button id="run">run</button>
-		<iframe id="result-iframe"></iframe>
+		<h1>Result</h1>
+		<div id="result"></div>
 	</body>
 </html>
