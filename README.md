@@ -1,9 +1,17 @@
 aspen
 =====
 
-aspen is an online konoha scripting environment
+aspen は、JavaScriptへのソースコード変換器を利用したオンライン
+プログラミング環境です。
 
-install
-----
+インストール方法
+----------------
 
+はじめに、`install.sh`を実行してkonohaをインストールしてください。
 
+    ./install.sh
+
+次に、Apacheの設定ファイルでcgiを実行できるように設定して下さい。
+
+使い方
+------
